@@ -31,4 +31,10 @@ class DemoController {
         list.forEach(sysUser -> System.out.println(sysUser));
         return "hello world";
     }
+
+    @GetMapping("/test")
+    public String test(){
+        demoService.test();
+        return "hello world";
+    }
 }

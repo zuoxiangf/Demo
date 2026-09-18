@@ -7,4 +7,6 @@ import org.springframework.stereotype.Component;
 
 public interface DemoService extends IService<SysUser> {
 
+    void test();
+
 }
