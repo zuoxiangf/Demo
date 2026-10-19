@@ -22,14 +22,20 @@ public class TodoList implements Serializable {
     /**
      * 主键ID
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private String id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 标题
      */
     @TableField("title")
     private String title;
+
+    /**
+     * 标题
+     */
+    @TableField("user_id")
+    private String userId;
 
     /**
      * 内容

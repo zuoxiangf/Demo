@@ -26,8 +26,12 @@ class TodoListController {
     private TodoListService todoListService;
 
     @GetMapping("/list")
-    public AjaxResult list(@RequestParam(required = false) String status){
-        return AjaxResult.success(todoListService.getList(status));
+    public AjaxResult list(@RequestParam(required = false) String status,String userId){
+        return AjaxResult.success(todoListService.getList(status,userId));
+    }
+    @GetMapping("/listCount")
+    public AjaxResult list( String userId){
+        return AjaxResult.success(todoListService.listCount(userId));
     }
 
     @GetMapping("/{id}")
