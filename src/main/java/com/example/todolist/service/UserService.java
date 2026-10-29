@@ -3,6 +3,7 @@ package com.example.todolist.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.todolist.entity.TodoList;
 import com.example.todolist.entity.User;
+import com.example.todolist.entity.UserDetail;
 import com.example.todolist.entity.dto.UpdateDto;
 
 import java.util.List;
@@ -14,5 +15,11 @@ public interface UserService extends IService<User> {
 
     Map<String, Object> login(User user);
 
-    Map<String, Object> info();
+    List<User>  info();
+
+    List<UserDetail>  detail();
+
+    String deleteDetail(String id);
+
+    String updateDetail(UserDetail userDetail);
 }

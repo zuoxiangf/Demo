@@ -6,17 +6,22 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.common.domain.AjaxResult;
 import com.example.todolist.entity.User;
+import com.example.todolist.entity.UserDetail;
+import com.example.todolist.mapper.UserDetailMapper;
 import com.example.todolist.mapper.UserMapper;
 import com.example.todolist.service.UserService;
 import com.example.todolist.utils.JwtUtil;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -33,6 +38,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Resource
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserDetailMapper userDetailMapper;
 
     public Map<String, Object> login(User userInput) {
         String code = userInput.getCode();
@@ -92,8 +100,50 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Map<String, Object> info() {
-        return null;
+    public List<User>  info() {
+        log.info("---->>>>>>>获取用户信息");
+        LambdaQueryWrapper<User> query = Wrappers.lambdaQuery();
+        List<User> list = this.list(query);
+        log.info("---->>>>>>>用户信息：{}", list.size());
+        if (list != null && list.size() > 0) {
+            return list;
+        }else {
+            return null;
+        }
+    }
+
+    @Override
+    public List<UserDetail> detail() {
+        log.info("---->>>>>>>获取用户信息");
+        LambdaQueryWrapper<UserDetail> query = Wrappers.lambdaQuery();
+        Page pageInfo = new Page(1, 10);
+        Page page = userDetailMapper.selectPage(pageInfo, query);
+        List<UserDetail> list = page.getRecords();
+        log.info("---->>>>>>>用户信息：{}", list.size());
+        if (list != null && list.size() > 0) {
+            list.forEach(item ->{
+                item.setMobile(item.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
+            });
+            return list;
+        }else {
+            return null;
+        }
+    }
+
+    @Override
+    public String deleteDetail(String id) {
+
+        log.info("---->>>>>>>删除用户信息:{}",id);
+        userDetailMapper.delete(new LambdaQueryWrapper<UserDetail>().eq(UserDetail::getId, id));
+        return "删除成功";
+    }
+
+    @Override
+    public String updateDetail(UserDetail userDetail) {
+        log.info("---->>>>>>>更新用户信息:{}",userDetail);
+        userDetailMapper.updateById(userDetail);
+        log.info("---->>>>>>>更新用户信息:{}",userDetail);
+        return "更新用户信息成功";
     }
 
     private User findByOpenid(String openid) {

@@ -2,6 +2,7 @@ package com.example.todolist.conrtoller;
 
 import com.example.common.domain.AjaxResult;
 import com.example.todolist.entity.User;
+import com.example.todolist.entity.UserDetail;
 import com.example.todolist.service.UserService;
 import kotlin.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,23 @@ public class UserController {
         return AjaxResult.success(userService.info());
     }
 
+    @GetMapping("/detail")
+    public AjaxResult detail() {
+
+        return AjaxResult.success(userService.detail());
+    }
+
+    @DeleteMapping("/deleteDetail/{id}")
+    public AjaxResult deleteDetail(@PathVariable String id) {
+
+        return AjaxResult.success(userService.deleteDetail(id));
+    }
+
+    @PutMapping("/updateDetail")
+    public AjaxResult updateDetail(@RequestBody UserDetail userDetail) {
+
+        return AjaxResult.success(userService.updateDetail(userDetail));
+    }
 }
 
 
